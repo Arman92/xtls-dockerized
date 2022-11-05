@@ -26,5 +26,5 @@ services:
               max-size: "10M"
       volumes:
           - ./xray/config.json:/etc/xray/config.json
-          - ./caddy_data/caddy/certificate/acme-v02.api.letsencrypt.org-directory:/etc/certs
+          - ./caddy_data/caddy/certificates/acme-v02.api.letsencrypt.org-directory:/etc/certs
       container_name: xray
