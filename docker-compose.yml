@@ -27,5 +27,4 @@ services:
       volumes:
           - ./xray/config.json:/etc/xray/config.json
           - ./caddy_data/caddy/certificate/acme-v02.api.letsencrypt.org-directory:/etc/certs
-          - tlsvolume:/tls
       container_name: xray
