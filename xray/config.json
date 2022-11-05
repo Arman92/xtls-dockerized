@@ -47,8 +47,8 @@
                   ],
                   "certificates": [
                       {
-                          "certificateFile": "/path/to/fullchain.crt", // Replace with your certificate, absolute path
-                          "keyFile": "/path/to/private.key" // Replace it with your private key, absolute path
+                          "certificateFile": "/etc/certs/entrand.art/entrand.art.crt", // Replace with your certificate, absolute path
+                          "keyFile": "/etc/certs/entrand.art/entrand.art.key" // Replace it with your private key, absolute path
                       }
                   ]
               }
