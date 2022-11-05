@@ -3,7 +3,7 @@ version: "3.7"
 services:
   caddy:
     container_name: caddy-server
-    image: caddy:2-apline
+    image: caddy:2-alpine
     restart: unless-stopped
     ports:
       - "80:80"
