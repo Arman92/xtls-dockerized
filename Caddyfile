@@ -3,10 +3,8 @@
 # }
 
 whistleofmine.lol {
-  reverse_proxy /websocket xray:443 {
-    header_up Host {upstream_hostport}
-    header_up X-Forwarded-Host {host}
-  }
+  reverse_proxy /websocket xray:443 
+  reverse_proxy /vmessws xray:443 
 
   file_server browse
   root * /srv
