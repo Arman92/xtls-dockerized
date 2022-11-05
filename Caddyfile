@@ -3,7 +3,7 @@
 # }
 
 entrand.art {
-  reverse_proxy * http://xray:443 {
+  reverse_proxy * https://xray:443 {
     header_up Host {upstream_hostport}
     header_up X-Forwarded-Host {host}
   }
