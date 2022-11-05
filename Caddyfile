@@ -1,0 +1,12 @@
+http://entrand.art {
+  redir https://{host}{uri} permanent
+}
+
+entrand.art {
+  reverse_proxy * http://xray:443 {
+    header_up Host {upstream_hostport}
+    header_up X-Forwarded-Host {host}
+  }
+  #file_server browse
+  #root * /www
+}

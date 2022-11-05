@@ -12,6 +12,20 @@ services:
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./site:/srv
-      - ./caddy-data:/data
-      - ./caddy-config:/config
+      - ./caddy_data:/data
+      - ./caddy_config:/config
     env_file: .env
+
+  xray:
+      image: teddysun/xray:1.6.2
+      # network_mode: host
+      restart: always
+      logging:
+          driver: "json-file"
+          options:
+              max-size: "10M"
+      volumes:
+          - ./xray/config.json:/etc/xray/config.json
+          - ./caddy_data/caddy/certificate/acme-v02.api.letsencrypt.org-directory:/etc/certs
+          - tlsvolume:/tls
+      container_name: xray
