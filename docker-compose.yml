@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  caddy:
+    container_name: caddy-server
+    image: caddy:2-apline
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - ./caddy-data:/data
+      - ./caddy-config:/config
+    env_file: .env
