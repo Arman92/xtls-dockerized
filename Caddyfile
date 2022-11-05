@@ -1,8 +1,8 @@
-# http://entrand.art {
+# http://whistleofmine.lol {
 #   redir https://{host}{uri} permanent
 # }
 
-entrand.art {
+whistleofmine.lol {
   reverse_proxy * https://xray:443 {
     header_up Host {upstream_hostport}
     header_up X-Forwarded-Host {host}

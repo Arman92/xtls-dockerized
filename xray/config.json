@@ -47,8 +47,8 @@
                   ],
                   "certificates": [
                       {
-                          "certificateFile": "/etc/certs/entrand.art/entrand.art.crt", // Replace with your certificate, absolute path
-                          "keyFile": "/etc/certs/entrand.art/entrand.art.key" // Replace it with your private key, absolute path
+                          "certificateFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.crt", // Replace with your certificate, absolute path
+                          "keyFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.key" // Replace it with your private key, absolute path
                       }
                   ]
               }
