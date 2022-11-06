@@ -1,10 +1,5 @@
-# http://whistleofmine.lol {
-#   redir https://{host}{uri} permanent
-# }
 
-
-
-whistleofmine.lol {
+whistleofmine.lol, vless.pcbshop.ir {
   # bind unix//dev/tmp/default.sock
 
   @websockets {
@@ -12,8 +7,6 @@ whistleofmine.lol {
     header Upgrade websocket
   }
 
-  # reverse_proxy /websocket xray:443 
-  # reverse_proxy /vmessws xray:443 
   reverse_proxy @websockets xray:443 
 
 
