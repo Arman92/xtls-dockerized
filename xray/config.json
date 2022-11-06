@@ -40,7 +40,7 @@
           },
           "streamSettings": {
               "network": "tcp",
-              "security": "xtls",
+              "security": "none",
               "xtlsSettings": {
                   "alpn": [
                       "http/1.1"
