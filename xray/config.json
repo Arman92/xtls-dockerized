@@ -1,148 +1,121 @@
 {
-  "log": {
-      "loglevel": "debug"
-  },
-  "inbounds": [
-      {
-          "port": 443,
-          "protocol": "vless",
-          "settings": {
-              "clients": [
-                  {
-                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // fill in your UUID
-                      "flow": "xtls-rprx-direct",
-                      "level": 0,
-                      "email": "a@b.c"
-                  }
-              ],
-              "decryption": "none",
-              "fallbacks": [
-                  {
-                      "dest": 1310, // Falling back to Xray's Trojan protocol by default
-                      "xver": 1
-                  },
-                  {
-                      "path": "/o43gyz3dgj", // Must be replaced with a custom PATH
-                      "dest": 1234,
-                      "xver": 1
-                  },
-                  {
-                      "path": "/yx7tebv3gi", // Must be replaced with a custom PATH
-                      "dest": 2345,
-                      "xver": 1
-                  },
-                  {
-                      "path": "/ggn16xn14v", // Must be replaced with a custom PATH
-                      "dest": 3456,
-                      "xver": 1
-                  }
-              ]
-          },
-          "streamSettings": {
-              "network": "tcp"
-          }
-      },
-      {
-          "port": 1310,
-          "listen": "127.0.0.1",
-          "protocol": "trojan",
-          "settings": {
-              "clients": [
-                  {
-                      "password": "rFQOsOGHDY", // fill in your password
-                      "level": 0,
-                      "email": "a@b.c"
-                  }
-              ],
-              "fallbacks": [
-                  {
-                    "dest": "/dev/tmp/default.sock",
-                    "xver": 1
-                  }
-              ]
-          },
-          "streamSettings": {
-              "network": "tcp"
-          }
-      },
-      {
-          "port": 1234,
-          "listen": "127.0.0.1",
-          "protocol": "vless",
-          "settings": {
-              "clients": [
-                  {
-                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
-                      "level": 0,
-                      "email": "a@b.c"
-                  }
-              ],
-              "decryption": "none"
-          },
-          "streamSettings": {
-              "network": "ws",
-              "security": "none",
-              "wsSettings": {
-                  "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
-                  "path": "/o43gyz3dgj" // Must be replaced with a custom PATH，Consistency of need and shunt
-              }
-          }
-      },
-      {
-          "port": 2345,
-          "listen": "127.0.0.1",
-          "protocol": "vmess",
-          "settings": {
-              "clients": [
-                  {
-                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
-                      "level": 0,
-                      "email": "a@b.c"
-                  }
-              ]
-          },
-          "streamSettings": {
-              "network": "tcp",
-              "security": "none",
-              "tcpSettings": {
-                  "acceptProxyProtocol": true,
-                  "header": {
-                      "type": "http",
-                      "request": {
-                          "path": [
-                              "/yx7tebv3gi" // Must be replaced with a custom PATH，Consistency of need and shunt
-                          ]
-                      }
-                  }
-              }
-          }
-      },
-      {
-          "port": 3456,
-          "listen": "127.0.0.1",
-          "protocol": "vmess",
-          "settings": {
-              "clients": [
-                  {
-                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
-                      "level": 0,
-                      "email": "a@b.c"
-                  }
-              ]
-          },
-          "streamSettings": {
-              "network": "ws",
-              "security": "none",
-              "wsSettings": {
-                  "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
-                  "path": "/ggn16xn14v" // Must be replaced with a custom PATH，Consistency of need and shunt
-              }
-          }
-      }
-  ],
-  "outbounds": [
-      {
-          "protocol": "freedom"
-      }
-  ]
-}
+    "log": {
+        "loglevel": "debug"
+    },
+    "inbounds": [
+        {
+            "port": 443,
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "11111111-1111-1111-1111-35e863d1c6c8", 
+                        "flow": "xtls-rprx-direct",
+                        "level": 0,
+                        "email": "a@b.c"
+                    }
+                ],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "path": "/vless-ws-path", 
+                        "dest": 1234,
+                        "xver": 1
+                    },
+                    {
+                        "path": "/vmess-tcp-path",
+                        "dest": 2345,
+                        "xver": 1
+                    },
+                    {
+                        "path": "/vmess-ws-path",
+                        "dest": 3456,
+                        "xver": 1
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp"
+            }
+        },
+        {
+            "port": 1234,
+            "listen": "127.0.0.1",
+            "protocol": "vless",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "11111111-1111-1111-1111-35e863d1c6c8", 
+                        "level": 0,
+                        "email": "a@b.c"
+                    }
+                ],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-ws-path"
+                }
+            }
+        },
+        {
+            "port": 2345,
+            "listen": "127.0.0.1",
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "11111111-1111-1111-1111-35e863d1c6c8", 
+                        "level": 0,
+                        "email": "a@b.c"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "acceptProxyProtocol": true,
+                    "header": {
+                        "type": "http",
+                        "request": {
+                            "path": [
+                                "/vmess-tcp-path"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "port": 3456,
+            "listen": "127.0.0.1",
+            "protocol": "vmess",
+            "settings": {
+                "clients": [
+                    {
+                        "id": "11111111-1111-1111-1111-35e863d1c6c8", 
+                        "level": 0,
+                        "email": "a@b.c"
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-ws-path"
+                }
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom"
+        }
+    ]
+  }
