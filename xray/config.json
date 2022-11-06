@@ -39,19 +39,7 @@
               ]
           },
           "streamSettings": {
-              "network": "tcp",
-              "security": "xtls",
-              "xtlsSettings": {
-                  "alpn": [
-                      "http/1.1"
-                  ],
-                  "certificates": [
-                      {
-                          "certificateFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.crt", // Replace with your certificate, absolute path
-                          "keyFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.key" // Replace it with your private key, absolute path
-                      }
-                  ]
-              }
+              "network": "tcp"
           }
       },
       {
