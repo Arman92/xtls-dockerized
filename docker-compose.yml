@@ -14,7 +14,6 @@ services:
       - ./site:/srv
       - ./caddy_data:/data
       - ./caddy_config:/config
-    env_file: .env
 
   xray:
       image: teddysun/xray:1.6.2
