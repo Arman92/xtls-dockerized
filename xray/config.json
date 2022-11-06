@@ -56,7 +56,8 @@
               ],
               "fallbacks": [
                   {
-                      "dest": 80 // Or fall back to other proxies that are also anti-probe
+                    "dest": "/dev/shm/default.sock",
+                    "xver": 1
                   }
               ]
           },
