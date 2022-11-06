@@ -10,7 +10,7 @@
               "clients": [
                   {
                       "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // fill in your UUID
-                      "flow": "xtls-rprx-direct",
+                      "flow": "xtls-rprx-splice",
                       "level": 0,
                       "email": "a@b.c"
                   }
