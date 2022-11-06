@@ -56,7 +56,7 @@
               ],
               "fallbacks": [
                   {
-                    "dest": "/dev/shm/default.sock",
+                    "dest": "/dev/tmp/default.sock",
                     "xver": 1
                   }
               ]

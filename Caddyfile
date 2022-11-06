@@ -4,8 +4,8 @@
 
 
 
-unix//dev/shm/default.sock {
-  bind unix//dev/shm/default.sock
+unix//dev/tmp/default.sock {
+  bind unix//dev/tmp/default.sock
   file_server browse
   root * /srv
 }

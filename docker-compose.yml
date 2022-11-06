@@ -14,7 +14,7 @@ services:
       - ./site:/srv
       - ./caddy_data:/data
       - ./caddy_config:/config
-      - listen-socket:/dev/shm/default.sock
+      - listen-socket:/dev/tmp
     env_file: .env
 
   xray:
@@ -29,7 +29,7 @@ services:
       volumes:
           - ./xray/config.json:/etc/xray/config.json
           - ./caddy_data/caddy/certificates/acme-v02.api.letsencrypt.org-directory:/etc/certs
-          - listen-socket:/dev/shm/default.sock
+          - listen-socket:/dev/tmp
       container_name: xray
 
 volumes:
