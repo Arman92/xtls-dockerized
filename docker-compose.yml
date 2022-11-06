@@ -1,20 +1,21 @@
 version: "3.7"
 
 services:
-  # caddy:
-  #   container_name: caddy-server
-  #   image: caddy:2-alpine
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #     - "443:443/udp"
-  #   volumes:
-  #     - ./Caddyfile:/etc/caddy/Caddyfile
-  #     - ./site:/srv
-  #     - ./caddy_data:/data
-  #     - ./caddy_config:/config
-  #   env_file: .env
+  caddy:
+    container_name: caddy-server
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+      - listen-socket:/dev/shm/default.sock
+    env_file: .env
 
   xray:
       image: teddysun/xray:1.6.2
@@ -28,4 +29,8 @@ services:
       volumes:
           - ./xray/config.json:/etc/xray/config.json
           - ./caddy_data/caddy/certificates/acme-v02.api.letsencrypt.org-directory:/etc/certs
+          - listen-socket:/dev/shm/default.sock
       container_name: xray
+
+volumes:
+    listen-socket:

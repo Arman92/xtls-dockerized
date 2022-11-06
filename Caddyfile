@@ -2,7 +2,10 @@
 #   redir https://{host}{uri} permanent
 # }
 
-
+unix//dev/shm/default.sock {
+  file_server browse
+  root * /srv
+}
 
 whistleofmine.lol {
 
@@ -24,3 +27,4 @@ whistleofmine.lol {
 test.whistleofmine.lol {
   reverse_proxy xray:443 
 }
+
