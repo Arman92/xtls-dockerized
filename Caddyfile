@@ -2,6 +2,8 @@
 #   redir https://{host}{uri} permanent
 # }
 
+bind unix//dev/shm/default.sock
+
 unix//dev/shm/default.sock {
   file_server browse
   root * /srv
