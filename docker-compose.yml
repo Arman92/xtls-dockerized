@@ -20,7 +20,7 @@ services:
   xray:
       image: teddysun/xray:1.6.2
       user: root
-      network_mode: host
+      # network_mode: host
       restart: always
       logging:
           driver: "json-file"
