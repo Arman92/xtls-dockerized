@@ -1,53 +1,148 @@
 {
-    "log": {
-        "loglevel": "debug"
-    },
-    "inbounds": [
-        {
-            "port": 443,
-            "protocol": "trojan",
-            "settings": {
-                "clients": [
-                    {
-                        "password":"rFQOsOGHDY",  // 密码
-                        "flow": "xtls-rprx-direct"
-                    }
-                ],
-                "fallbacks": [
-                    {
-                        "dest": "/dev/shm/default.sock",
-                        "xver": 1
-                    },
-                    {
-                        "alpn": "h2",
-                        "dest": "/dev/shm/h2c.sock",
-                        "xver": 1
-                    }
-                ]
-            },
-            "streamSettings": {
-                "network": "tcp",
-                "security": "xtls",
-                "xtlsSettings": {
-                    "alpn": [
-                        "http/1.1",
-                        "h2"
-                    ],
-                    "certificates": [
-                        {
-                            "certificateFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.crt", // Replace with your certificate, absolute path
-                            "keyFile": "/etc/certs/whistleofmine.lol/whistleofmine.lol.key", // Replace it with your private key, absolute path
-                            "ocspStapling": 3600  // 验证周期 3600 秒
-                        }
-                    ],
-                    "minVersion": "1.2"  // 如果是ecc证书则最低使用 TLSv1.2 ，如果你不清楚证书类型或者不是 ecc 证书，删掉这行
-                }
-            }
-        }
-    ],
-    "outbounds": [
-        {
-            "protocol": "freedom"
-        }
-    ]
+  "log": {
+      "loglevel": "debug"
+  },
+  "inbounds": [
+      {
+          "port": 443,
+          "protocol": "vless",
+          "settings": {
+              "clients": [
+                  {
+                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // fill in your UUID
+                      "flow": "xtls-rprx-direct",
+                      "level": 0,
+                      "email": "a@b.c"
+                  }
+              ],
+              "decryption": "none",
+              "fallbacks": [
+                  {
+                      "dest": 1310, // Falling back to Xray's Trojan protocol by default
+                      "xver": 1
+                  },
+                  {
+                      "path": "/o43gyz3dgj", // Must be replaced with a custom PATH
+                      "dest": 1234,
+                      "xver": 1
+                  },
+                  {
+                      "path": "/yx7tebv3gi", // Must be replaced with a custom PATH
+                      "dest": 2345,
+                      "xver": 1
+                  },
+                  {
+                      "path": "/ggn16xn14v", // Must be replaced with a custom PATH
+                      "dest": 3456,
+                      "xver": 1
+                  }
+              ]
+          },
+          "streamSettings": {
+              "network": "tcp"
+          }
+      },
+      {
+          "port": 1310,
+          "listen": "127.0.0.1",
+          "protocol": "trojan",
+          "settings": {
+              "clients": [
+                  {
+                      "password": "rFQOsOGHDY", // fill in your password
+                      "level": 0,
+                      "email": "a@b.c"
+                  }
+              ],
+              "fallbacks": [
+                  {
+                    "dest": "/dev/tmp/default.sock",
+                    "xver": 1
+                  }
+              ]
+          },
+          "streamSettings": {
+              "network": "tcp"
+          }
+      },
+      {
+          "port": 1234,
+          "listen": "127.0.0.1",
+          "protocol": "vless",
+          "settings": {
+              "clients": [
+                  {
+                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
+                      "level": 0,
+                      "email": "a@b.c"
+                  }
+              ],
+              "decryption": "none"
+          },
+          "streamSettings": {
+              "network": "ws",
+              "security": "none",
+              "wsSettings": {
+                  "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
+                  "path": "/o43gyz3dgj" // Must be replaced with a custom PATH，Consistency of need and shunt
+              }
+          }
+      },
+      {
+          "port": 2345,
+          "listen": "127.0.0.1",
+          "protocol": "vmess",
+          "settings": {
+              "clients": [
+                  {
+                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
+                      "level": 0,
+                      "email": "a@b.c"
+                  }
+              ]
+          },
+          "streamSettings": {
+              "network": "tcp",
+              "security": "none",
+              "tcpSettings": {
+                  "acceptProxyProtocol": true,
+                  "header": {
+                      "type": "http",
+                      "request": {
+                          "path": [
+                              "/yx7tebv3gi" // Must be replaced with a custom PATH，Consistency of need and shunt
+                          ]
+                      }
+                  }
+              }
+          }
+      },
+      {
+          "port": 3456,
+          "listen": "127.0.0.1",
+          "protocol": "vmess",
+          "settings": {
+              "clients": [
+                  {
+                      "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
+                      "level": 0,
+                      "email": "a@b.c"
+                  }
+              ]
+          },
+          "streamSettings": {
+              "network": "ws",
+              "security": "none",
+              "wsSettings": {
+                  "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
+                  "path": "/ggn16xn14v" // Must be replaced with a custom PATH，Consistency of need and shunt
+              }
+          }
+      }
+  ],
+  "outbounds": [
+      {
+          "protocol": "freedom"
+      }
+  ]
 }
