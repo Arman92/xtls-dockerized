@@ -12,7 +12,7 @@
                       "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // fill in your UUID
                       "flow": "xtls-rprx-direct",
                       "level": 0,
-                      "email": "love@example.com"
+                      "email": "a@b.c"
                   }
               ],
               "decryption": "none",
@@ -22,17 +22,17 @@
                       "xver": 1
                   },
                   {
-                      "path": "/websocket", // Must be replaced with a custom PATH
+                      "path": "/o43gyz3dgj", // Must be replaced with a custom PATH
                       "dest": 1234,
                       "xver": 1
                   },
                   {
-                      "path": "/vmesstcp", // Must be replaced with a custom PATH
+                      "path": "/yx7tebv3gi", // Must be replaced with a custom PATH
                       "dest": 2345,
                       "xver": 1
                   },
                   {
-                      "path": "/vmessws", // Must be replaced with a custom PATH
+                      "path": "/ggn16xn14v", // Must be replaced with a custom PATH
                       "dest": 3456,
                       "xver": 1
                   }
@@ -49,9 +49,9 @@
           "settings": {
               "clients": [
                   {
-                      "password": "", // fill in your password
+                      "password": "rFQOsOGHDY", // fill in your password
                       "level": 0,
-                      "email": "love@example.com"
+                      "email": "a@b.c"
                   }
               ],
               "fallbacks": [
@@ -77,7 +77,7 @@
                   {
                       "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
                       "level": 0,
-                      "email": "love@example.com"
+                      "email": "a@b.c"
                   }
               ],
               "decryption": "none"
@@ -87,7 +87,7 @@
               "security": "none",
               "wsSettings": {
                   "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
-                  "path": "/websocket" // Must be replaced with a custom PATH，Consistency of need and shunt
+                  "path": "/o43gyz3dgj" // Must be replaced with a custom PATH，Consistency of need and shunt
               }
           }
       },
@@ -100,7 +100,7 @@
                   {
                       "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
                       "level": 0,
-                      "email": "love@example.com"
+                      "email": "a@b.c"
                   }
               ]
           },
@@ -113,7 +113,7 @@
                       "type": "http",
                       "request": {
                           "path": [
-                              "/vmesstcp" // Must be replaced with a custom PATH，Consistency of need and shunt
+                              "/yx7tebv3gi" // Must be replaced with a custom PATH，Consistency of need and shunt
                           ]
                       }
                   }
@@ -129,7 +129,7 @@
                   {
                       "id": "ac3e87e8-b4ef-40c5-b8d9-fddc0d0ecb6d", // Fill in your UUID
                       "level": 0,
-                      "email": "love@example.com"
+                      "email": "a@b.c"
                   }
               ]
           },
@@ -138,7 +138,7 @@
               "security": "none",
               "wsSettings": {
                   "acceptProxyProtocol": true, // Reminder: If you use Nginx/Caddy to reverse WS, you need to delete this line
-                  "path": "/vmessws" // Must be replaced with a custom PATH，Consistency of need and shunt
+                  "path": "/ggn16xn14v" // Must be replaced with a custom PATH，Consistency of need and shunt
               }
           }
       }
