@@ -5,7 +5,7 @@
 
 
 whistleofmine.lol {
-  bind unix//dev/tmp/default.sock
+  # bind unix//dev/tmp/default.sock
 
   @websockets {
     header Connection *Upgrade*
