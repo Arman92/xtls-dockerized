@@ -2,12 +2,15 @@
 #   redir https://{host}{uri} permanent
 # }
 
-@websockets {
-	header Connection *Upgrade*
-	header Upgrade websocket
-}
+
 
 whistleofmine.lol {
+
+  @websockets {
+    header Connection *Upgrade*
+    header Upgrade websocket
+  }
+
   # reverse_proxy /websocket xray:443 
   # reverse_proxy /vmessws xray:443 
   reverse_proxy @websockets xray:443 
