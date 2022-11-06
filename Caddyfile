@@ -19,3 +19,8 @@ whistleofmine.lol {
   file_server browse
   root * /srv
 }
+
+
+test.whistleofmine.lol {
+  reverse_proxy xray:443 
+}
