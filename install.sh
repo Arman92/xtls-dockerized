@@ -192,7 +192,7 @@ ShowLink() {
 		echo -e "VLESS over WS:\n$vless_share"
 
 		vmess_ws_share="{\"add\":\"$domain\",\"aid\":\"0\",\"alpn\":\"\",\"host\":\"\",\"id\":\"$UUID\",\"net\":\"ws\",\"path\":\"/$vmess_ws_path\",\"port\":\"443\",\"ps\":\"vmess-$domain\",\"scy\":\"none\",\"sni\":\"\",\"tls\":\"tls\",\"type\":\"\",\"v\":\"2\"}"
-		echo -e "VLESS over WS:\nvmess://$(echo $vmess_ws_share | base64 -w 0)"
+		echo -e "VLESS over WS:\nvmess://$(echo $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
 	done
 }
 
