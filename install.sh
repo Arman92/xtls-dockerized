@@ -124,6 +124,22 @@ ChangeUUID() {
 		ChangeSettings "UUID" "$UUIDN1"
 		echo -e "Changed the UUID in configs to a random one: \n\t\"$UUIDN1\""
 
+		echo -e "Generating random paths for vmess and vless protocols..."
+		vless_ws_path=$(cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-15} | head -n 1)
+		vmess_tcp_path=$(cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-15} | head -n 1)
+		vmess_ws_path=$(cat /dev/urandom | tr -dc '[:alpha:]' | fold -w ${1:-15} | head -n 1)
+		ChangeSettings "vless_ws_path" "$vless_ws_path"
+		ChangeSettings "vmess_tcp_path" "$vmess_tcp_path"
+		ChangeSettings "vmess_ws_path" "$vmess_ws_path"
+
+		echo "Vless WS path: $vless_ws_path"
+		echo "Vmess TCP path: $vmess_tcp_path"
+		echo "Vless WS path: $vmess_ws_path"
+
+		sed -i -E "s|/vless-ws-path\"|$vless_ws_path\"|g" ./config.json
+		sed -i -E "s|/vmess-tcp-path\"|$vmess_tcp_path\"|g" ./config.json
+		sed -i -E "s|/vmess-ws-path\"|$vmess_ws_path\"|g" ./config.json
+
 		;;
 	esac
 }
@@ -132,6 +148,7 @@ ChangeFlow() {
 	CurrentFlowTpe=$(grep FLOW .settings | awk -F= '{print $2}')
 	if [ -z "$CurrentFlowTpe" ]; then
 		CurrentFlowTpe=$(grep 'flow' config.json | awk -F'"' '{print $4}')
+		ChangeSettings "FLOW" $CurrentFlowTpe
 	fi
 	read -p "Current flow control is $CurrentFlowTpe, want to change it?(y or N def N)" ChangeFlowType
 	case "${ChangeFlowType}" in
@@ -158,12 +175,28 @@ ChangeFlow() {
 }
 
 ShowLink() {
-	FQDN=$(grep 'FQDN' .settings | awk -F= '{print $2}')
+	DOMAINS=$(grep 'DOMAINS' .settings | awk -F= '{print $2}')
 	UUID=$(grep 'UUID' .settings | awk -F= '{print $2}')
 	FLOW=$(grep 'FLOW' .settings | awk -F= '{print $2}')
-	sharelink="vless://$UUID@$FQDN:443?flow=$FLOW&encryption=none&security=xtls&type=tcp&headerType=none#$FQDN"
-	echo "Your VLESS ShareLink is:"
-	echo $sharelink
+	vless_ws_path=$(grep 'vless_ws_path' .settings | awk -F= '{print $2}')
+	vmess_tcp_path=$(grep 'vmess_tcp_path' .settings | awk -F= '{print $2}')
+	vmess_ws_path=$(grep 'vmess_ws_path' .settings | awk -F= '{print $2}')
+	
+
+
+
+
+	for domain in ${DOMAINS//,/ }
+	do
+		# call your procedure/other scripts here below
+		echo -e "Links for domain \"$domain\"\n"
+
+		vless_share="vless://$UUID@$domain:443?flow=$FLOW&encryption=none&security=none&type=ws&path=$vless_ws_path&headerType=none#$domain"
+		echo -e "VLESS over WS:\n$vless_share"
+
+		vmess_ws_share="vmess://$UUID@$domain:443?flow=$FLOW&encryption=none&security=none&type=ws&path=$vmess_ws_path&headerType=none#$domain"
+		echo -e "VLESS over WS:\n$vmess_ws_share"
+	done
 }
 
 Update() {
@@ -197,7 +230,7 @@ Install() {
 	docker-compose down
 	docker-compose up -d
 
-	sed -i.old '/^.*restart xray.*/d' special.conf
+	sed -i.old '/^.*restart xray.*/d' /var/spool/cron/crontabs/"$(whoami)"
 	if [ -e "/usr/bin/docker-compose" ]; then
 		DockerComposePath="/usr/bin/docker-compose"
 		echo "0 0 * * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
