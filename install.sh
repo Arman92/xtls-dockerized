@@ -18,14 +18,14 @@ Precheck() {
 	*) ;;
 	esac
 
-	EssentialFiles="tls Webdata Caddyfile .settings xray/config.json docker-compose.yml"
+	EssentialFiles="site Caddyfile .settings xray/config.json docker-compose.yml"
 	for file in $EssentialFiles; do
 		if [ ! -e $file ]; then
 			case "${file}" in
 			"Caddyfile" | "xray/config.json" | "docker-compose.yml")
 				curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/${file}"
 				;;
-			"tls" | "Webdata")
+			"tls" | "site")
 				mkdir $file
 				;;
 			".settings")
@@ -194,7 +194,7 @@ Install() {
 	ChangeCaddy
 	ChangeUUID
 	ChangeFlow
-	docker-compose down --rmi all
+	docker-compose down
 	docker-compose up -d
 
 	sed -i.old '/^.*restart xray.*/d' special.conf
