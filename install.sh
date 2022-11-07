@@ -183,9 +183,6 @@ ShowLink() {
 	vmess_ws_path=$(grep 'vmess_ws_path' .settings | awk -F= '{print $2}')
 	
 
-
-
-
 	for domain in ${DOMAINS//,/ }
 	do
 		# call your procedure/other scripts here below
@@ -258,6 +255,9 @@ main() {
 		;;
 	"remove")
 		Remove
+		;;
+	"links")
+		ShowLink
 		;;
 	*)
 		echo -e "Usage guide: \n\n./install.sh install\t\t# Step-By-Step configuration and installation\n./install.sh remove \t\t# Removes the docker containers"
