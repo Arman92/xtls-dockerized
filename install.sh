@@ -1,9 +1,11 @@
 #!/bin/bash
+DEST_PATH="TEST"
+
 Precheck() {
 	DOCKER_V=$(docker -v | grep -i "version")
 	DOCKER_COMPOSE_V=$(docker-compose -v | grep -i "version")
 	if [ -z "$DOCKER_V" ] || [ -z "$DOCKER_COMPOSE_V" ]; then
-		echo "Docker or docker-compose not found. "
+		echo "Docker or docker-compose not found. ";
 		exit 0
 	fi
 	case "${1}" in
@@ -14,16 +16,14 @@ Precheck() {
 		fi
 		;;
 	*) ;;
-
 	esac
 
-	EssentialFiles="Caddyfile .settings"
+	EssentialFiles="tls Webdata Caddyfile .settings xray/config.json docker-compose.yml"
 	for file in $EssentialFiles; do
 		if [ ! -e $file ]; then
 			case "${file}" in
-			"Caddyfile")
-				# curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/${file}"
-        # git clone https://github.com/Arman92/xtls-dockerized.git
+			"Caddyfile" | "xray/config.json" | "docker-compose.yml")
+				curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/${file}"
 				;;
 			"tls" | "Webdata")
 				mkdir $file
@@ -35,7 +35,6 @@ Precheck() {
 			esac
 		fi
 	done
-
 }
 
 ChangeSettings() {
@@ -46,19 +45,11 @@ ChangeSettings() {
 	fi
 }
 
-SetCF() {
-	read -p "Please Input Your CloudFlare Mailbox: " MAILBOX
-	read -p "Please Input Your CloudFlare API_Key: " APIKEY
-	sed -i -E "s|CF_Email=.+|CF_Email=$MAILBOX|g" ./docker-compose.yml
-	sed -i -E "s|CF_Key=.+|CF_Key=$APIKEY|g" ./docker-compose.yml
-	ChangeSettings "CF_Email" "$MAILBOX"
-	ChangeSettings "CF_Key" "$APIKEY"
-}
 
 SetCaddy() {
   count=1
   domains=""
-  
+
   echo -e "Please input your domain(s). \nYes you can enter more than one domain!"
   while read -p "Domain #$count: (hit enter to skip):   " input; do
     if [ "$input" = "" ]; then break; fi
@@ -75,46 +66,29 @@ SetCaddy() {
     echo "Domains: $domains"
   done
 	
-  sed -i -E "1s|domain.com \{|$domains \{|g" ./Caddyfile.template
+  sed -i -E "1s|.*\{|$domains \{|g" ./Caddyfile
   echo -e "\nFallback to use \n\t1.file_server for a decoy website \n\t2.redirect to another URL?\n(Default 1) : "
 	read mode
 	case "${mode}" in
 	2)
 		echo "Using redirect to another URL"
 		read -p "Please input the URL (e.g. https://google.com) you want to redirect to as fallback: " ppppp
-		sed -i -E "14,+0s|^\s+#+| |g" ./Caddyfile.template
-		sed -i -E "11,+1s|^|#|g" ./Caddyfile.template
-		sed -i -E "14s|redir .*|redir $ppppp {|g" ./Caddyfile.template
+		sed -i -E "14,+0s|^\s+#+| |g" ./Caddyfile
+		sed -i -E "11,+1s|^|#|g" ./Caddyfile
+		sed -i -E "14s|redir .*|redir $ppppp {|g" ./Caddyfile
 		;;
 	*)
 		echo "Using file_server to serve a decoy website"
-		sed -i -E "14,+0s|^| #|g" ./Caddyfile.template
-		sed -i -E "11,+1s|^\s+#+| |g" ./Caddyfile.template
+		sed -i -E "14,+0s|^| #|g" ./Caddyfile
+		sed -i -E "11,+1s|^\s+#+| |g" ./Caddyfile
 		;;
 	esac
 	ChangeSettings "DOMAINS" "$domains"
 }
 
-ChangeCF() {
-	iscfset=$(grep 'CF_' ./.settings | awk '{print NR}' | sed -n '$p')
-	case "${iscfset}" in
-	2)
-		read -p "Want to change CloudFlare settings? (yN default N): " changecf
-		case "${changecf}" in
-		'y' | 'Y')
-			SetCF
-			;;
-		*) ;;
-		esac
-		;;
-	*)
-		SetCF
-		;;
-	esac
-}
 
 ChangeCaddy() {
-	iscaddyset=$(grep 'FQDN' ./.settings | awk '{print NR}' | sed -n '$p')
+	iscaddyset=$(grep 'DOMAINS' ./.settings | awk '{print NR}' | sed -n '$p')
 	case "${iscaddyset}" in
 	1)
 		read -p "Want to change domain settings? (yN default N): " changefqdn
@@ -138,7 +112,7 @@ ChangeUUID() {
 		case "${setUUID}" in
 		'y' | 'Y')
 			UUIDN1=$(curl -s https://www.uuidgenerator.net/api/version4)
-			sed -i -E "s|\w{8}(-\w{4}){3}-\w{12}\",//xtls|$UUIDN1\",//xtls|g" ./config.json
+			sed -i -E "s|\w{8}(-\w{4}){3}-\w{12}\"|$UUIDN1\"|g" ./config.json
 			ChangeSettings "UUID" "$UUIDN1"
 			;;
 		*) ;;
@@ -146,8 +120,9 @@ ChangeUUID() {
 		;;
 	*)
 		UUIDN1=$(curl -s https://www.uuidgenerator.net/api/version4)
-		sed -i -E "s|\w{8}(-\w{4}){3}-\w{12}\",//xtls|$UUIDN1\",//xtls|g" ./config.json
+		sed -i -E "s|\w{8}(-\w{4}){3}-\w{12}\"|$UUIDN1\"|g" ./config.json
 		ChangeSettings "UUID" "$UUIDN1"
+		echo -e "Changed the UUID in configs to a random one: \n\t\"$UUIDN1\""
 
 		;;
 	esac
@@ -216,21 +191,19 @@ Update() {
 
 Install() {
 	Precheck 1
-	# ChangeCF
 	ChangeCaddy
 	ChangeUUID
 	ChangeFlow
 	docker-compose down --rmi all
 	docker-compose up -d
-	docker exec acme --issue --dns dns_cf -d $FQDN --server letsencrypt
-	docker exec acme --install-cert -d $FQDN --key-file /tls/key.key --fullchain-file /tls/cert.crt
-	docker-compose restart
+
+	sed -i.old '/^.*restart xray.*/d' special.conf
 	if [ -e "/usr/bin/docker-compose" ]; then
 		DockerComposePath="/usr/bin/docker-compose"
-		echo "0 0 1 * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
+		echo "0 0 * * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
 	elif [ -e "/usr/local/bin/docker-compose" ]; then
 		DockerComposePath="/usr/local/bin/docker-compose"
-		echo "0 0 1 * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
+		echo "0 0 * * * cd $PWD && $DockerComposePath restart xray" >>/var/spool/cron/crontabs/"$(whoami)"
 	fi
 
 	ShowLink
@@ -242,7 +215,6 @@ Remove() {
 	docker-compose down --rmi all
 }
 
-#echo "Your Random XTLS UUID Is: $UUIDN1"
 main() {
 	case "${1}" in
 	"install")
