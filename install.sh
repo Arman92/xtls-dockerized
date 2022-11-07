@@ -132,13 +132,13 @@ ChangeUUID() {
 		ChangeSettings "vmess_tcp_path" "$vmess_tcp_path"
 		ChangeSettings "vmess_ws_path" "$vmess_ws_path"
 
-		echo "Vless WS path: $vless_ws_path"
-		echo "Vmess TCP path: $vmess_tcp_path"
-		echo "Vless WS path: $vmess_ws_path"
+		echo "Vless WS path: /$vless_ws_path"
+		echo "Vmess TCP path: /$vmess_tcp_path"
+		echo "Vless WS path: /$vmess_ws_path"
 
-		sed -i -E "s|/vless-ws-path\"|$vless_ws_path\"|g" ./config.json
-		sed -i -E "s|/vmess-tcp-path\"|$vmess_tcp_path\"|g" ./config.json
-		sed -i -E "s|/vmess-ws-path\"|$vmess_ws_path\"|g" ./config.json
+		sed -i -E "s|/vless-ws-path\"|/$vless_ws_path\"|g" ./config.json
+		sed -i -E "s|/vmess-tcp-path\"|/$vmess_tcp_path\"|g" ./config.json
+		sed -i -E "s|/vmess-ws-path\"|/$vmess_ws_path\"|g" ./config.json
 
 		;;
 	esac
