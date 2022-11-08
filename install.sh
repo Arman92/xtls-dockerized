@@ -18,15 +18,12 @@ Precheck() {
 	*) ;;
 	esac
 
-	EssentialFiles="site Caddyfile .settings xray/config.json docker-compose.yml"
+	EssentialFiles="Caddyfile .settings xray/config.json docker-compose.yml"
 	for file in $EssentialFiles; do
 		if [ ! -e $file ]; then
 			case "${file}" in
 			"Caddyfile" | "xray/config.json" | "docker-compose.yml")
 				curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/${file}"
-				;;
-			"tls" | "site")
-				mkdir $file
 				;;
 			".settings")
 				touch $file
@@ -35,6 +32,11 @@ Precheck() {
 			esac
 		fi
 	done
+
+	curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/decoy-website.tar.gz"
+	mkdir site
+	tar -zxvf ./decoy-website.tar.gz -C site
+	mv site/decoy-website/* site/
 }
 
 ChangeSettings() {
