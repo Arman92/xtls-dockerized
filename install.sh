@@ -37,6 +37,16 @@ Precheck() {
 	mkdir site
 	tar -zxf ./decoy-website.tar.gz -C site
 	mv site/decoy-website/* site/
+
+	# qrc is used to generate QR codes out of connection links
+	ARCH=$(uname -m | grep -i "x86_64")
+	if [ -z $ARCH ]; then
+		curl -Ls "https://github.com/fumiyas/qrc/releases/download/v0.1.1/qrc_linux_arm" -o ./qrc
+	else
+		curl -Ls  "https://github.com/fumiyas/qrc/releases/download/v0.1.1/qrc_linux_amd64" -o ./qrc
+	fi
+
+	chmod +x ./qrc
 }
 
 ChangeSettings() {
@@ -176,14 +186,28 @@ ChangeFlow() {
 
 }
 
-ShowLink() {
+ExposeSettingsValues() {
 	DOMAINS=$(grep 'DOMAINS' .settings | awk -F= '{print $2}')
 	UUID=$(grep 'UUID' .settings | awk -F= '{print $2}')
 	FLOW=$(grep 'FLOW' .settings | awk -F= '{print $2}')
 	vless_ws_path=$(grep 'vless_ws_path' .settings | awk -F= '{print $2}')
 	vmess_tcp_path=$(grep 'vmess_tcp_path' .settings | awk -F= '{print $2}')
 	vmess_ws_path=$(grep 'vmess_ws_path' .settings | awk -F= '{print $2}')
-	
+}
+
+GenerateVlessWSLink() {
+	host_domain=$1
+	vless_share="vless://$UUID@$host_domain:443?encryption=none&security=tls&type=ws&path=%2F$vless_ws_path&sni=$host_domain&host=$host_domain#vless-$host_domain"
+}
+
+GenerateVmessWSLink() {
+	host_domain=$1
+	json_part="{\"add\":\"$host_domain\",\"aid\":\"0\",\"alpn\":\"\",\"host\":\"\",\"id\":\"$UUID\",\"net\":\"ws\",\"path\":\"/$vmess_ws_path\",\"port\":\"443\",\"ps\":\"vmess-$host_domain\",\"scy\":\"none\",\"sni\":\"\",\"tls\":\"tls\",\"type\":\"\",\"v\":\"2\"}"
+	vmess_ws_share="vmess://$(echo -n $json_part | base64 -w 0 | sed -E 's/=//g')"
+}
+
+ShowLink() {
+	ExposeSettingsValues
 
 	echo -e "\n\n********************\n\n"
 
@@ -192,17 +216,49 @@ ShowLink() {
 		# call your procedure/other scripts here below
 		echo -e "Links for domain \"$domain\""
 
-		vless_share="vless://$UUID@$domain:443?encryption=none&security=tls&type=ws&path=%2F$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
+		# vless_share="vless://$UUID@$domain:443?encryption=none&security=tls&type=ws&path=%2F$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
+		GenerateVlessWSLink domain
+
 		echo -e "\n*** VLESS over WS: ***"
 		echo "$vless_share"
 
-		vmess_ws_share="{\"add\":\"$domain\",\"aid\":\"0\",\"alpn\":\"\",\"host\":\"\",\"id\":\"$UUID\",\"net\":\"ws\",\"path\":\"/$vmess_ws_path\",\"port\":\"443\",\"ps\":\"vmess-$domain\",\"scy\":\"none\",\"sni\":\"\",\"tls\":\"tls\",\"type\":\"\",\"v\":\"2\"}"
+		GenerateVmessWSLink domain
 		echo -e "\n*** VMESS over WS: ***"
-		echo -e "vmess://$(echo -n $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
+		echo -e $vmess_ws_share
 
 
 		echo -e "\n\n********************\n\n"
 	done
+}
+
+QR() {
+	ExposeSettingsValues
+	IFS=', ' read -r -a array <<< "$DOMAINS"
+	
+	echo "Select the domain you want to print QR codes for:"
+
+	for index in "${!array[@]}"
+	do
+			echo "$index) ${array[index]}"
+	done
+	read -p "Enter a number between 0 and ${#array[@]}: " selectedIndex
+
+	if [ $selectedIndex -gt ${#array[@]} ] || [ $selectedIndex -lt 0 ]
+	then
+		echo -e "\nYou entered a wrong number! Try Again!\n"
+		sleep 0.5
+		QR
+	else
+		echo -e "QR codes for domain \"${array[$selectedIndex]}\""
+		selectedDomain=${array[$selectedIndex]}
+		GenerateVlessWSLink $selectedDomain
+		GenerateVmessWSLink $selectedDomain
+
+		echo -e "\n\nVLESS QR Code: \n"
+		./qrc "$vless_share"
+		echo -e "\n\nVMESS QR Code: \n"
+		./qrc "$vmess_ws_share"
+	fi
 }
 
 Update() {
@@ -268,11 +324,16 @@ main() {
 	"links")
 		ShowLink
 		;;
+	"qr")
+		QR
+
+	;;
 	*)
     echo "Usage guide:"
     echo -e "./install.sh install\t\t# Step-By-Step configuration and installation"
     echo -e "./install.sh remove \t\t# Removes the docker containers"
     echo -e "./install.sh links \t\t# Prints the ready to use links to connect to server" 
+		echo -e "./install.sh qr \t\t# Generates QR codes to scan directly with your phone" 
 		;;
 	esac
 
