@@ -183,16 +183,18 @@ ShowLink() {
 	vmess_ws_path=$(grep 'vmess_ws_path' .settings | awk -F= '{print $2}')
 	
 
+	echo -e "\n\n********************\n\n"
+
 	for domain in ${DOMAINS//,/ }
 	do
 		# call your procedure/other scripts here below
 		echo -e "Links for domain \"$domain\""
 
-		vless_share="vless://$UUID@$domain:443?flow=$FLOW&encryption=none&security=tls&type=ws&path=/$vless_ws_path&headerType=none#$domain"
+		vless_share="vless://$UUID@$domain:443?flow=$FLOW&encryption=none&security=tls&type=ws&path=/$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
 		echo -e "VLESS over WS:\n$vless_share"
 
 		vmess_ws_share="{\"add\":\"$domain\",\"aid\":\"0\",\"alpn\":\"\",\"host\":\"\",\"id\":\"$UUID\",\"net\":\"ws\",\"path\":\"/$vmess_ws_path\",\"port\":\"443\",\"ps\":\"vmess-$domain\",\"scy\":\"none\",\"sni\":\"\",\"tls\":\"tls\",\"type\":\"\",\"v\":\"2\"}"
-		echo -e "VLESS over WS:\nvmess://$(echo $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
+		echo -e "VLESS over WS:\nvmess://$(echo -n $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
 
 
 		echo -e "\n\n********************\n\n"
