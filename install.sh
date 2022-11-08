@@ -265,7 +265,10 @@ main() {
 		ShowLink
 		;;
 	*)
-		echo -e "Usage guide: \n\n./install.sh install\t\t# Step-By-Step configuration and installation\n./install.sh remove \t\t# Removes the docker containers"
+    echo "Usage guide:"
+    echo -e "./install.sh install\t\t# Step-By-Step configuration and installation"
+    echo -e "./install.sh remove \t\t# Removes the docker containers"
+    echo -e "./install.sh links \t\t# Prints the ready to use links to connect to server" 
 		;;
 	esac
 
