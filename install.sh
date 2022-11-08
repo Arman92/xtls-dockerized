@@ -35,7 +35,7 @@ Precheck() {
 
 	curl -sO "https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/decoy-website.tar.gz"
 	mkdir site
-	tar -zxvf ./decoy-website.tar.gz -C site
+	tar -zxf ./decoy-website.tar.gz -C site
 	mv site/decoy-website/* site/
 }
 
