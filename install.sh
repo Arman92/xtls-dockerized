@@ -191,10 +191,12 @@ ShowLink() {
 		echo -e "Links for domain \"$domain\""
 
 		vless_share="vless://$UUID@$domain:443?flow=$FLOW&encryption=none&security=tls&type=ws&path=/$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
-		echo -e "VLESS over WS:\n$vless_share"
+		echo -e "\n*** VLESS over WS: ***"
+		echo "$vless_share"
 
 		vmess_ws_share="{\"add\":\"$domain\",\"aid\":\"0\",\"alpn\":\"\",\"host\":\"\",\"id\":\"$UUID\",\"net\":\"ws\",\"path\":\"/$vmess_ws_path\",\"port\":\"443\",\"ps\":\"vmess-$domain\",\"scy\":\"none\",\"sni\":\"\",\"tls\":\"tls\",\"type\":\"\",\"v\":\"2\"}"
-		echo -e "VLESS over WS:\nvmess://$(echo -n $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
+		echo -e "\n*** VMESS over WS: ***"
+		echo -e "vmess://$(echo -n $vmess_ws_share | base64 -w 0 | sed -E 's/=//g')"
 
 
 		echo -e "\n\n********************\n\n"
