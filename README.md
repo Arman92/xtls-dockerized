@@ -1,12 +1,14 @@
 # xtls-dockerized
 
-## Install Docker
-If not already, install docker using below commands:
+## Initialization
+If not already, install docker and docker-compose using below commands:
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo apt install docker-compose
 ```
+
+Make sure ports **443** and **80** are open on your cloud/server firewall.
 
 ## Install and Configure the Xray and Caddy with installer script
 Use the installer below, this is step-by-step installer which will spin off docker containers and does the heavy lifting for you.
@@ -26,3 +28,10 @@ You can also generate QR codes to easily import the configs in your phone:
 ```bash
 ./install.sh qr
 ```
+
+###  TODO
+- Enable Trojan protocol
+- Enable VMess over TCP
+
+### Credits
+This repo uses https://github.com/Colllect/colllect.io as a decoy website, you can manually change it to something else by changing contents of `xray-docker/site` directory
