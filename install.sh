@@ -192,7 +192,7 @@ ShowLink() {
 		# call your procedure/other scripts here below
 		echo -e "Links for domain \"$domain\""
 
-		vless_share="vless://$UUID@$domain:443?flow=$FLOW&encryption=none&security=tls&type=ws&path=/$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
+		vless_share="vless://$UUID@$domain:443?encryption=none&security=tls&type=ws&path=%2F$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
 		echo -e "\n*** VLESS over WS: ***"
 		echo "$vless_share"
 
