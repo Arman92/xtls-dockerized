@@ -213,16 +213,15 @@ ShowLink() {
 
 	for domain in ${DOMAINS//,/ }
 	do
-		# call your procedure/other scripts here below
 		echo -e "Links for domain \"$domain\""
 
 		# vless_share="vless://$UUID@$domain:443?encryption=none&security=tls&type=ws&path=%2F$vless_ws_path&sni=$domain&host=$domain#vless-$domain"
-		GenerateVlessWSLink domain
+		GenerateVlessWSLink $domain
 
 		echo -e "\n*** VLESS over WS: ***"
 		echo "$vless_share"
 
-		GenerateVmessWSLink domain
+		GenerateVmessWSLink $domain
 		echo -e "\n*** VMESS over WS: ***"
 		echo -e $vmess_ws_share
 
