@@ -15,7 +15,7 @@ Use the installer below, this is step-by-step installer which will spin off dock
 
 ```bash
 mkdir xray-docker && cd xray-docker
-wget https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/install.sh -O ./install.sh && chmod +x./install.sh && ./install.sh install
+wget https://raw.githubusercontent.com/Arman92/xtls-dockerized/main/install.sh -O ./install.sh && chmod +x ./install.sh && ./install.sh install
 ```
 
 ## Share the links
