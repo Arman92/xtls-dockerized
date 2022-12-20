@@ -234,13 +234,19 @@ QR() {
 	ExposeSettingsValues
 	IFS=', ' read -r -a array <<< "$DOMAINS"
 	
-	echo "Select the domain you want to print QR codes for:"
 
-	for index in "${!array[@]}"
-	do
-			echo "$index) ${array[index]}"
-	done
-	read -p "Enter a number between 0 and ${#array[@]}: " selectedIndex
+	if [ ${#array[@]} == "1" ]
+	then
+		selectedIndex="0"
+	else 
+		echo "Select the domain you want to print QR codes for:"
+
+		for index in "${!array[@]}"
+		do
+				echo "$index) ${array[index]}"
+		done
+		read -p "Enter a number between 0 and $((${#array[@]}-1)): " selectedIndex
+	fi
 
 	if [ $selectedIndex -gt ${#array[@]} ] || [ $selectedIndex -lt 0 ]
 	then

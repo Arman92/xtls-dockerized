@@ -24,7 +24,8 @@ Once finished with the above installer, you can view the VLESS and VMESS share l
 ./install.sh  links
 ```
 
-You can also generate QR codes to easily import the configs in your phone:
+## QR Codes
+You can generate QR codes to easily import the configs in your phone:
 ```bash
 ./install.sh qr
 ```
