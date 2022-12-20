@@ -27,4 +27,6 @@ services:
       volumes:
           - ./config.json:/etc/xray/config.json
           - ./caddy_data/caddy/certificates/acme-v02.api.letsencrypt.org-directory:/etc/certs
+      environment:
+          - xray.vmess.aead.forced=false
       container_name: xray
