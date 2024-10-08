@@ -5,7 +5,6 @@ If not already, install docker and docker-compose using below commands:
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
-sudo apt install docker-compose
 ```
 
 Make sure ports **443** and **80** are open on your cloud/server firewall.
